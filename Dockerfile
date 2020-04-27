@@ -22,6 +22,7 @@ RUN go build -o /bin/util
 FROM alpine:latest
 WORKDIR /app/util
 COPY --from=build /bin/util /app/util/util
+COPY --from=build /go/src/util/template /app/util/template
 RUN apk update
 RUN apk add git
 
