@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"text/template"
 )
 
 type router struct {
@@ -13,10 +14,20 @@ type router struct {
 func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.URL.Path {
 	case "/":
-		fmt.Fprint(w, `
-		<p><a href=addr>addr</a></p>
-		<p><a href=headers>headers</a></p>
-		`)
+		type page struct {
+			Title     string
+			Utilities []string
+		}
+		p := page{Title: "Utilities", Utilities: []string{"addr", "headers"}}
+		t, err := template.New("page.html").ParseFiles("template/page.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if err := t.Execute(w, p); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	case "/addr":
 		addr := req.Header.Get("X-Forwarded-For") // behind proxy
 		if addr == "" {
@@ -27,7 +38,6 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		for name, values := range req.Header {
 			fmt.Fprintf(w, "%v: %v\n", name, values)
 		}
-		return
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
