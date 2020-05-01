@@ -16,10 +16,20 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.URL.Path {
 	case "/":
 		type page struct {
-			Title     string
-			Utilities []string
+			Title        string
+			WebUtilities []string
+			CliUtilities map[string]string
 		}
-		p := page{Title: "Utilities", Utilities: []string{"addr", "headers"}}
+		p := page{
+			Title:        "Utilities",
+			WebUtilities: []string{"addr", "headers"},
+			CliUtilities: map[string]string{
+				"waf-runner": "https://github.com/jreisinger/waf-runner",
+				"waf-tester": "https://github.com/jreisinger/waf-tester",
+				"checkip":    "https://github.com/jreisinger/checkip",
+				"runp":       "https://github.com/jreisinger/runp",
+			},
+		}
 		t, err := template.New("page.html").ParseFiles("template/page.html")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
