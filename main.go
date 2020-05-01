@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 	"text/template"
 )
@@ -35,12 +36,23 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 		fmt.Fprintf(w, "%v\n", addr)
 	case "/headers":
-		for name, values := range req.Header {
+		for _, name := range sortedKeys(req.Header) {
+			values := req.Header[name]
 			fmt.Fprintf(w, "%v: %v\n", name, values)
 		}
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
+}
+
+// return keys of a map alphabetically sorted
+func sortedKeys(m map[string][]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 func main() {
