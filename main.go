@@ -37,7 +37,7 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "%v\n", addr)
 	case "/headers":
 		for _, name := range sortedKeys(req.Header) {
-			values := req.Header[name]
+			values := strings.Join(req.Header[name], " | ")
 			fmt.Fprintf(w, "%v: %v\n", name, values)
 		}
 	default:
