@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"sort"
 	"strings"
-	"text/template"
 )
 
 type router struct {
@@ -15,31 +14,7 @@ type router struct {
 func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.URL.Path {
 	case "/":
-		type page struct {
-			Title        string
-			WebUtilities []string
-			CliUtilities map[string]string
-		}
-		p := page{
-			Title:        "Utilities",
-			WebUtilities: []string{"addr", "headers"},
-			CliUtilities: map[string]string{
-				"~/bin":      "https://github.com/jreisinger/dotfiles/tree/master/bin",
-				"checkip":    "https://github.com/jreisinger/checkip",
-				"runp":       "https://github.com/jreisinger/runp",
-				"waf-runner": "https://github.com/jreisinger/waf-runner",
-				"waf-tester": "https://github.com/jreisinger/waf-tester",
-			},
-		}
-		t, err := template.New("page.html").ParseFiles("template/page.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if err := t.Execute(w, p); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		root(w, req)
 	case "/addr":
 		addr := req.Header.Get("X-Forwarded-For") // behind proxy
 		if addr == "" {
@@ -51,6 +26,10 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			values := strings.Join(req.Header[name], " | ")
 			fmt.Fprintf(w, "%v: %v\n", name, values)
 		}
+	case "/status/200":
+		fmt.Fprintln(w, "200 OK")
+	case "/status/500":
+		http.Error(w, "500 Internal Server Error - a generic “catch-all” response", http.StatusInternalServerError)
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
