@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"sort"
 )
 
 type router struct {
@@ -24,16 +23,6 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
-}
-
-// return keys of a map alphabetically sorted
-func sortedKeys(m map[string][]string) []string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	return keys
 }
 
 func main() {
