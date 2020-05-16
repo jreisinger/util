@@ -15,7 +15,7 @@ func root(w http.ResponseWriter, req *http.Request) {
 	}
 	p := page{
 		Title:        "Utilities",
-		WebUtilities: []string{"addr", "headers"},
+		WebUtilities: []string{"addr", "headers", "status200", "status500"},
 		CliUtilities: map[string]string{
 			"~/bin":      "https://github.com/jreisinger/dotfiles/tree/master/bin",
 			"checkip":    "https://github.com/jreisinger/checkip",

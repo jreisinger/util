@@ -16,9 +16,9 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		addr(w, req)
 	case "/headers":
 		headers(w, req)
-	case "/status/200":
+	case "/status200":
 		status200(w, req)
-	case "/status/500":
+	case "/status500":
 		status500(w, req)
 	default:
 		http.Error(w, "404 Not Found", 404)
