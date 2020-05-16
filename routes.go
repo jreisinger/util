@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 func root(w http.ResponseWriter, req *http.Request) {
@@ -31,4 +33,27 @@ func root(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func addr(w http.ResponseWriter, req *http.Request) {
+	addr := req.Header.Get("X-Forwarded-For") // behind proxy
+	if addr == "" {
+		addr = strings.Split(req.RemoteAddr, ":")[0]
+	}
+	fmt.Fprintf(w, "%v\n", addr)
+}
+
+func headers(w http.ResponseWriter, req *http.Request) {
+	for _, name := range sortedKeys(req.Header) {
+		values := strings.Join(req.Header[name], " | ")
+		fmt.Fprintf(w, "%v: %v\n", name, values)
+	}
+}
+
+func status200(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintln(w, "200 OK")
+}
+
+func status500(w http.ResponseWriter, req *http.Request) {
+	http.Error(w, "500 Internal Server Error - a generic “catch-all” response", http.StatusInternalServerError)
 }

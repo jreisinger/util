@@ -5,7 +5,7 @@ build: test
 	GO111MODULE=on go build
 
 run: build
-	./main
+	./util
 
 # can be more of course (see runp)
 #PLATFORMS := linux/arm linux/amd64

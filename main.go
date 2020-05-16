@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"sort"
-	"strings"
 )
 
 type router struct {
@@ -16,20 +14,13 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	case "/":
 		root(w, req)
 	case "/addr":
-		addr := req.Header.Get("X-Forwarded-For") // behind proxy
-		if addr == "" {
-			addr = strings.Split(req.RemoteAddr, ":")[0]
-		}
-		fmt.Fprintf(w, "%v\n", addr)
+		addr(w, req)
 	case "/headers":
-		for _, name := range sortedKeys(req.Header) {
-			values := strings.Join(req.Header[name], " | ")
-			fmt.Fprintf(w, "%v: %v\n", name, values)
-		}
+		headers(w, req)
 	case "/status/200":
-		fmt.Fprintln(w, "200 OK")
+		status200(w, req)
 	case "/status/500":
-		http.Error(w, "500 Internal Server Error - a generic “catch-all” response", http.StatusInternalServerError)
+		status500(w, req)
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
