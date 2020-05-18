@@ -47,10 +47,7 @@ func status200(w http.ResponseWriter, req *http.Request) {
 }
 
 func status302(w http.ResponseWriter, req *http.Request) {
-	scheme := "https"
-	if req.URL.Scheme == "" {
-		scheme = "http"
-	}
+	scheme := "http" // proxy is handling TLS not us
 	location := fmt.Sprintf("%s://%s/", scheme, req.Host)
 	w.Header().Set("Location", location)
 	w.WriteHeader(http.StatusFound)
