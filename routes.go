@@ -15,7 +15,7 @@ func root(w http.ResponseWriter, req *http.Request) {
 	}
 	p := page{
 		Title:        "Utilities",
-		WebUtilities: []string{"addr", "headers", "status200", "status500"},
+		WebUtilities: []string{"addr", "headers", "status200", "status302", "status500"},
 		CliUtilities: map[string]string{
 			"~/bin":      "https://github.com/jreisinger/dotfiles/tree/master/bin",
 			"checkip":    "https://github.com/jreisinger/checkip",
@@ -52,6 +52,12 @@ func headers(w http.ResponseWriter, req *http.Request) {
 
 func status200(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintln(w, "200 OK")
+}
+
+func status302(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Location", "https://util.reisinge.net/")
+	w.WriteHeader(http.StatusFound)
+	fmt.Fprintln(w, "302 Found")
 }
 
 func status500(w http.ResponseWriter, req *http.Request) {

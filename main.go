@@ -18,6 +18,8 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		headers(w, req)
 	case "/status200":
 		status200(w, req)
+	case "/status302":
+		status302(w, req)
 	case "/status500":
 		status500(w, req)
 	default:
