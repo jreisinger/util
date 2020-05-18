@@ -47,7 +47,12 @@ func status200(w http.ResponseWriter, req *http.Request) {
 }
 
 func status302(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Location", "https://util.reisinge.net/")
+	scheme := "https"
+	if req.URL.Scheme == "" {
+		scheme = "http"
+	}
+	location := fmt.Sprintf("%s://%s/", scheme, req.Host)
+	w.Header().Set("Location", location)
 	w.WriteHeader(http.StatusFound)
 	fmt.Fprintln(w, "302 Found")
 }
