@@ -10,17 +10,9 @@
 
 <body>
 
-<p>Web</p>
 <ul style="list-style-type:disclosure-closed">
 {{range .WebUtilities}}
 <li><a href="/{{ . }}">{{ . }}</a></li>
-{{end}}
-</ul>
-
-<p>CLI</p>
-<ul style="list-style-type:disclosure-closed">
-{{range $k, $v := .CliUtilities}}
-<li><a href="{{ $v }}">{{ $k }}</a></li>
 {{end}}
 </ul>
 
