@@ -12,7 +12,7 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	switch req.URL.Path {
 	case "/":
 		root(w, req)
-	case "/addr":
+	case "/addr", "/ip", "/ipaddr":
 		addr(w, req)
 	case "/headers":
 		headers(w, req)

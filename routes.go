@@ -14,7 +14,7 @@ func root(w http.ResponseWriter, req *http.Request) {
 	}
 	p := page{
 		Title:        "Utilities",
-		WebUtilities: []string{"addr", "headers", "status200", "status302", "status500"},
+		WebUtilities: []string{"ipaddr", "headers", "status200", "status302", "status500"},
 	}
 	t, err := template.New("page.html").ParseFiles("template/page.html")
 	if err != nil {
