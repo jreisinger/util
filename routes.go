@@ -28,11 +28,12 @@ func root(w http.ResponseWriter, req *http.Request) {
 }
 
 func addr(w http.ResponseWriter, req *http.Request) {
-	addr := req.Header.Get("X-Real-Ip") // behind proxy
-	if addr == "" {
-		addr = req.RemoteAddr
+	xff := req.Header["X-Forwarded-For"]
+	if len(xff) > 0 { // behind proxy?
+		fmt.Fprintf(w, "%s", xff[0])
+	} else {
+		fmt.Fprintf(w, "%s", req.RemoteAddr)
 	}
-	fmt.Fprintf(w, "%v", addr)
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
