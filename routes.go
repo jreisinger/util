@@ -30,10 +30,9 @@ func root(w http.ResponseWriter, req *http.Request) {
 func addr(w http.ResponseWriter, req *http.Request) {
 	addr := req.Header.Get("X-Forwarded-For") // behind proxy
 	if addr == "" {
-		// addr = strings.Split(req.RemoteAddr, ":")[0]
 		addr = req.RemoteAddr
 	}
-	fmt.Fprintf(w, "%v\n", addr)
+	fmt.Fprintf(w, "%v", addr)
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
