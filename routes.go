@@ -28,7 +28,7 @@ func root(w http.ResponseWriter, req *http.Request) {
 }
 
 func addr(w http.ResponseWriter, req *http.Request) {
-	addr := req.Header.Get("X-Forwarded-For") // behind proxy
+	addr := req.Header.Get("X-Real-Ip") // behind proxy
 	if addr == "" {
 		addr = req.RemoteAddr
 	}
