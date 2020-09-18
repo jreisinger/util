@@ -22,6 +22,8 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		status302(w, req)
 	case "/status500":
 		status500(w, req)
+	case "/favicon.ico":
+		favicon(w, req)
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}

@@ -58,3 +58,8 @@ func status302(w http.ResponseWriter, req *http.Request) {
 func status500(w http.ResponseWriter, req *http.Request) {
 	http.Error(w, "500 Internal Server Error - a generic “catch-all” response", http.StatusInternalServerError)
 }
+
+// favicon
+func favicon(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/favicon.ico")
+}
