@@ -23,6 +23,7 @@ FROM alpine:latest
 WORKDIR /app/util
 COPY --from=build /bin/util /app/util/util
 COPY --from=build /go/src/util/template /app/util/template
+COPY --from=build /go/src/util/static /app/util/static
 RUN apk update
 RUN apk add git
 
