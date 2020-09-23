@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -30,9 +31,13 @@ func root(w http.ResponseWriter, req *http.Request) {
 func addr(w http.ResponseWriter, req *http.Request) {
 	xff := req.Header["X-Forwarded-For"]
 	if len(xff) > 0 { // behind proxy?
-		fmt.Fprintf(w, "%s", xff[0])
+		fmt.Fprintf(w, "%s", strings.Split(xff[0], ", ")[0])
 	} else {
-		fmt.Fprintf(w, "%s", req.RemoteAddr)
+		// Remove part with port number.
+		port := regexp.MustCompile(`:\d+$`)
+		ipAddr := port.ReplaceAllString(req.RemoteAddr, "")
+
+		fmt.Fprintf(w, "%s", ipAddr)
 	}
 }
 
